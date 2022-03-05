@@ -1,3 +1,5 @@
+// lv1 하샤드 수
+// https://programmers.co.kr/learn/courses/30/lessons/12947
 function solution(x) {
   const xString = x.toString();
   const number = 0;
