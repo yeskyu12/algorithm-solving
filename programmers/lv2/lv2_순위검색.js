@@ -2,33 +2,70 @@
 // https://programmers.co.kr/learn/courses/30/lessons/72412?language=javascript
 // TODO: 효율성 개선 필요
 function solution(infos, queries) {
-  let answer = [];
-  
-  const parse = (query) => {
-      const [lan, job, career, fs] = query.split(" and ");
-      const [food, score] = fs.split(" ");
-      
-      return { lan, job, career, food, score };
-  }
-  
-  const check = (a, b) => (a === "-" || a === b);
-  
-  const filtering = (query, info) => {
-      const { lan, job, career, food, score } = query;
-      const [l, j, c, f, s] = info.split(" ");
-      
-      return check(lan, l) && check(job, j) && check(career, c) && check(food, f) &&
-          (score === "-" || Number(s) >= Number(score));
-  }
-  
-  const search = (query) => {
-      const q = parse(query);
-      answer.push(infos.filter((info) => filtering(q, info)).length);
-  }
-  
-  queries.forEach((query) => {
-      search(query);
-  })
-  
-  return answer;
+    let answer = [];
+    
+    const lan = ["c", "j", "p", "-"];
+    const job = ["b", "f", "-"];
+    const career = ["j", "s", "-"];
+    const food = ["c", "p", "-"];
+    const groups = {};
+    
+    lan.forEach((l) => {
+        job.forEach((j) => {
+            career.forEach((c) => {
+                food.forEach((f) => {
+                    const group = l + j + c + f;
+                    groups[group] = [];
+                })
+            })
+        })
+    })
+    
+    infos.forEach((info) => {
+        const [l, j, c, f, score] = info.split(" ");
+        const group = l[0] + j[0] + c[0] + f[0];
+        
+        groups[group].push(Number(score));
+    })
+    
+    const check = (k1, k2) => {
+        const key = k1.split("");
+        let isSame = true;
+        
+        key.forEach((k, i) => {
+            if (k !== "-" && k !== k2[i]) isSame = false;
+        })
+        return isSame;
+    }
+    
+    const getScores = (key) => {
+        const [l, j, c, f] = key.split("");
+        const scores = [];
+        
+        for (const [k, v] of Object.entries(groups)) {
+            if (!k.includes("-") && check(key, k)) scores.push(...groups[k])
+        }
+        
+        groups[key] = scores;
+    }
+    
+    for (const key of Object.keys(groups)) {
+        if (key.includes("-")) getScores(key);
+    }
+    
+    const getMembers = (group, score) => {
+        const members = groups[group].filter((s) => s >= score);
+        answer.push(members.length);
+    }
+    
+    queries.forEach((query) => {
+        const [l, j, c, fs] = query.split(" and ");
+        const [f, s] = fs.split(" ");
+        const group = l[0] + j[0] + c[0] + f[0];
+        const score = s === "-" ? 0 : Number(s);
+        
+        getMembers(group, score);
+    })
+    
+    return answer;
 }
