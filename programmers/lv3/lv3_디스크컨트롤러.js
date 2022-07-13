@@ -1,5 +1,6 @@
 // lv3 디스크 컨트롤러
 // https://school.programmers.co.kr/learn/courses/30/lessons/42627
+// TODO: 실패
 const sortJob = (a, b) => a[0] - b[0];
 
 const sortWaiting = (a, b) => a[1] - b[1];
