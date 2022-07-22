@@ -2,4 +2,4 @@
 
 - [Programmers](https://programmers.co.kr/)
 - [BOJ](https://www.acmicpc.net/)
-- [leetcode](https://leetcode.com/)
+- [Leetcode](https://leetcode.com/)
