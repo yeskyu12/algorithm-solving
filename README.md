@@ -1,5 +1,5 @@
-# 알고리즘 문제 풀이
+# Algorithm Solving
 
-- [programmers](https://programmers.co.kr/)
+- [Programmers](https://programmers.co.kr/)
 - [BOJ](https://www.acmicpc.net/)
-- [leetcode](https://leetcode.com/)
+- [Leetcode](https://leetcode.com/)
