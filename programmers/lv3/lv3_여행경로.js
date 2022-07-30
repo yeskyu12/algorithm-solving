@@ -1,29 +1,39 @@
 // lv3 여행경로
 // https://school.programmers.co.kr/learn/courses/30/lessons/43164
-// TODO: 사전순으로 경로 막히는 케이스 고려 필요
 function solution(tickets) {
-  const answer = ["ICN"];
-  
-  const ticketsCopy = [...tickets].sort((a, b) => {
-      if (a[0] > b[0]) return 1;
-      if (a[0] < b[0]) return -1;
-      if (a[1] > b[1]) return 1;
-      if (a[1] < b[1]) return -1;
-      return 0;
-  });
-  
-  const getNext = (airport) => {
-      const index = ticketsCopy.findIndex((ticket) => ticket[0] === airport);
-      const next = ticketsCopy[index];
-      ticketsCopy.splice(index, 1);
-      return next;
-  }
-  
-  while (ticketsCopy.length > 0) {
-      const current = answer[answer.length - 1];
-      const next = getNext(current);
-      answer.push(next[1]);
-  }
-  
-  return answer;
+    let answer = [];
+    
+    const getAnswer = (route) => {
+        if (answer.length === 0) answer = route;
+        if (answer.join("") > route.join("")) answer = route;
+    }
+    
+    const getNexts = (airport, remainedTickets) => {
+        const nexts = remainedTickets
+            .filter((ticket, i) => {
+                if (ticket[0] === airport) {
+                    return ticket;
+                }
+            });
+        return nexts;
+    }
+    
+    const travel = (remainedTickets, route) => {
+        if (remainedTickets.length === 0) {
+            getAnswer(route);
+            return;
+        }
+        const current = route[route.length - 1];
+        const nexts = getNexts(current, remainedTickets);
+        nexts.forEach((next) => {
+            const index = remainedTickets.findIndex((ticket) => ticket.join("") === next.join(""));
+            const remainedTicketsCopy = [...remainedTickets];
+            
+            remainedTicketsCopy.splice(index, 1);
+            travel(remainedTicketsCopy, [...route, next[1]]);
+        })
+    }
+    
+    travel([...tickets], ["ICN"]);
+    return answer;
 }
